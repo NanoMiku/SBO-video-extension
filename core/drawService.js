@@ -1,5 +1,31 @@
 var sboModule = sboModule || {};
 
+var array_stuff = []; 
+
+var button = document.createElement("Button");
+button.innerHTML = "eat it all";
+button.style = "top:0;right:0;position:absolute;z-index: 9999";
+document.body.appendChild(button);
+
+let array_handing = function(){
+    console.log(array_stuff)
+    for (var a = 0; a<10; a++){
+        for (var i = 0; i<array_stuff.length; i++){
+            //console.log(array_stuff[i][2], array_stuff[i][0].bitrate);
+        //console.log);
+        if (i == 0){ 
+            continue;
+        }
+        else if(array_stuff[i][2] == array_stuff[i-1][2]) {
+            array_stuff.splice(i-1, 1)
+            //console.log("hello world");
+        }
+    }
+      
+    }
+    console.log(array_stuff);
+}
+
 sboModule.drawService = (function () {
 
     let getTitle = function (flavor) {
@@ -24,6 +50,20 @@ sboModule.drawService = (function () {
         http.send();
     };
 
+    button.onclick = function() {
+        console.log("hello world");
+        //console.log(array_stuff)
+        array_handing();
+        
+        //downloadHandler(array_stuff[4][0], array_stuff[4][1], array_stuff[4][2], array_stuff[4][3]);
+        
+        for (var i = 0; i<array_stuff.length; i++){
+            
+            
+            setTimeout(downloadHandler(array_stuff[i][0], array_stuff[i][1], array_stuff[i][2], array_stuff[i][3]), 30000*(i+1));
+        }
+    }
+    
     return {
         draw: function (domList, videoUrl, index, flavors) {
 
@@ -43,15 +83,7 @@ sboModule.drawService = (function () {
                 'left: 0px;' +
                 'display: none;';
 
-            let dialog = $('<div>').attr('style', dialogStyle + ';display: none;');
-
-            $(document).click(function (e) {
-                if (e.target === dldBtn[0] || e.target === dldBtnIcon[0]) {
-                    dialog.attr('style', dialogStyle + ';display: inline;')
-                } else {
-                    dialog.attr('style', dialogStyle + ';display: none;');
-                }
-            });
+            let dialog = $('<div>').attr('style', dialogStyle + ';display: inline;');
 
             dialog.insertAfter($(dldBtn));
 
@@ -60,12 +92,16 @@ sboModule.drawService = (function () {
                 let dldBtnIcon = $('<i>').attr('class', f.isAudio ? 'fa fa-headphones' : 'fa fa-video-camera').attr('style', 'font-size: ' + size + 'px;');
                 let dldBtn = $('<a>').attr('title', getTitle(f)).attr('style', 'cursor: pointer; margin: 2px 12px 12px 2px;').append(dldBtnIcon);
                 dialog.append(dldBtn);
-                size += 1;
-
+                size += 1;               
+                if (f.width != 0) {
+                    
+                    array_stuff.push([ f, videoUrl,index, title]);
+                }
+                              
                 dldBtn.click(function () {
-                    downloadHandler(f, videoUrl, index, title);
+                    downloadHandler(f, videoUrl, index, title);                
                 });
             });
-        }
-    }
+        }  
+    }    
 }());
