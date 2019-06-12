@@ -57,11 +57,15 @@ sboModule.drawService = (function () {
         
         //downloadHandler(array_stuff[4][0], array_stuff[4][1], array_stuff[4][2], array_stuff[4][3]);
         
-        for (var i = 0; i<array_stuff.length; i++){
-            
-            
-            setTimeout(downloadHandler(array_stuff[i][0], array_stuff[i][1], array_stuff[i][2], array_stuff[i][3]), 30000*(i+1));
-        }
+        var i = 0;
+
+        var intervalId = setInterval(function(){
+            if(i == array_stuff.length){
+               clearInterval(intervalId);
+                           }
+            downloadHandler(array_stuff[i][0], array_stuff[i][1], array_stuff[i][2], array_stuff[i][3]);         
+            i++;
+         }, 40000);
     }
     
     return {
